@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html>
-<body>
-  <script>
-    // If run in the opened tab, set opener.window.name = "OPENER_OK"
-    if (window.opener) {
-      window.opener.eval(`window.name = "OPENER_OK";`);
-    }
-    // After a moment, write out the opener’s window.name in this tab
-    setTimeout(() => {
-      document.body.textContent = "OPENER name: " + window.name;
-    }, 500);
-  </script>
-</body>
-</html>
+<html><body>
+<script>
+  // If window.opener exists, we’ll trigger a DNS lookup for "hasopener"
+  if (window.opener) {
+    new Image().src = 'http://hasopener.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/';
+  } else {
+    new Image().src = 'http://noopener.toetqx9cw60filn7a5fc93hyfph3qlp0w.oast.site/';
+  }
+</script>
+</body></html>
